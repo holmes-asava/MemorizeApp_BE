@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:13.2
+    environment:
+      - POSTGRES_PASSWORD=password
+      - PGDATA=/tmp
+    ports:
+      - "5432:5432"
+    container_name: simplesat_db
+
+  web:
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.dev
+      - PYTHONUNBUFFERED=1
+      - SECRET_KEY=whatever-secret-key
+    build: .
+    command: ["./start.sh"]
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "8000:8000"
+    container_name: simplesat_server
+    depends_on:
+      - db
