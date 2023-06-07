@@ -16,6 +16,9 @@ class Memo(models.Model):
 
 
 class MemoItem(models.Model):
-    parent_memo = models.ForeignKey(Memo, on_delete=models.CASCADE)
+    parent_memo = models.ForeignKey(
+        Memo, on_delete=models.CASCADE, related_name="memo_items"
+    )
     is_complete = models.BooleanField(default=False)
     description = models.TextField()
+    order = models.IntegerField(default=-1)
