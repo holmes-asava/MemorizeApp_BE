@@ -20,8 +20,10 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import routers
 
+from memo_manager.views import MemoViewset
 
 router = routers.DefaultRouter()
+router.register(r"memo", MemoViewset, basename="memo")
 
 schema_view = get_schema_view(
     openapi.Info(

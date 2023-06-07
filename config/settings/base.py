@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "health_check.storage",
     "timezone_field",
     "user_manager",
+    "memo_manager",
 ]
 
 MIDDLEWARE = [
