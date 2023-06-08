@@ -5,7 +5,11 @@ from django.contrib import admin
 
 class MemoAdmin(admin.ModelAdmin):
     model = Memo
-    fields = [field.name for field in Memo._meta.fields if field.name not in ["id"]]
+    fields = [
+        field.name
+        for field in Memo._meta.fields
+        if field.name not in ["id", "created_at"]
+    ]
     list_display = fields
 
 
