@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError, PermissionDenied
 
 from django.apps import apps
 from django.db import models
-
+from django.db.models import Max
 from user_manager.models import User
 
 
@@ -21,7 +21,7 @@ class MemoItem(models.Model):
     )
     is_complete = models.BooleanField(default=False)
     description = models.TextField()
-    order = models.IntegerField(default=-1)
+    order = models.SmallIntegerField(default=-1)
 
     def save(self, **kwargs):
         if (
@@ -39,6 +39,14 @@ class MemoItem(models.Model):
             for instance in reorder_item:
                 instance.order += 1
                 instance.save()
+        if self.order == -1:
+            max_value = (
+                MemoItem.objects.filter(parent_memo=self.parent_memo)
+                .exclude(id=self.id)
+                .aggregate(max_order=Max("order"))["max_order"]
+                or 0
+            )
+            self.order = max_value + 1
         super().save(**kwargs)
 
     def delete(self, **kwargs):
