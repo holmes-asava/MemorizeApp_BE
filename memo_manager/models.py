@@ -22,3 +22,30 @@ class MemoItem(models.Model):
     is_complete = models.BooleanField(default=False)
     description = models.TextField()
     order = models.IntegerField(default=-1)
+
+    def save(self, **kwargs):
+        if (
+            MemoItem.objects.filter(parent_memo=self.parent_memo, order=self.order)
+            .exclude(id=self.id)
+            .exists()
+        ):
+            reorder_item = (
+                MemoItem.objects.filter(
+                    parent_memo=self.parent_memo, order_gte=self.order
+                )
+                .exclude(id=self.id)
+                .order_by("-order")
+            )
+            for instance in reorder_item:
+                instance.order += 1
+                instance.save()
+        super().save(**kwargs)
+
+    def delete(self, **kwargs):
+        reorder_item = MemoItem.objects.filter(
+            parent_memo=self.parent_memo, order_gt=self.order
+        ).order_by("order")
+        super().delete(**kwargs)
+        for instance in reorder_item:
+            instance.order -= 1
+            instance.save()
