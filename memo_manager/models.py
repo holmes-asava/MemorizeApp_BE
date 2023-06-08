@@ -31,7 +31,7 @@ class MemoItem(models.Model):
         ):
             reorder_item = (
                 MemoItem.objects.filter(
-                    parent_memo=self.parent_memo, order_gte=self.order
+                    parent_memo=self.parent_memo, order__gte=self.order
                 )
                 .exclude(id=self.id)
                 .order_by("-order")
@@ -43,7 +43,7 @@ class MemoItem(models.Model):
 
     def delete(self, **kwargs):
         reorder_item = MemoItem.objects.filter(
-            parent_memo=self.parent_memo, order_gt=self.order
+            parent_memo=self.parent_memo, order__gt=self.order
         ).order_by("order")
         super().delete(**kwargs)
         for instance in reorder_item:
