@@ -17,7 +17,7 @@ class MemoItemSerializer(serializers.ModelSerializer):
 
 
 class MemoSerializer(serializers.ModelSerializer):
-    items = MemoItemSerializer(many=True, source="memo_items", read_only=True)
+    items = serializers.SerializerMethodField()
 
     class Meta:
         model = Memo
@@ -26,6 +26,9 @@ class MemoSerializer(serializers.ModelSerializer):
         read_only = [
             "created_at",
         ]
-        ordering = [
-            "created_at",
-        ]
+        ordering = ["created_at", "item"]
+
+    def get_items(self, obj):
+        return MemoItemSerializer(
+            MemoItem.objects.filter(parent_memo=obj).order_by("order"), many=True
+        ).data

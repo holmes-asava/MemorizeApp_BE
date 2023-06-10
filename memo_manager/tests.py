@@ -111,6 +111,14 @@ class WorkOrderTestCase(APITestCase):
             self.assertEqual(res["order"], i + 1)
         self.assertEqual(self.response_json[0]["is_completed"], True)
         self.assertEqual(self.response_json[0]["description"], memo_item.description)
+        self.user_gets(url=f"/memo/")
+        self.assertEqual(self.response.status_code, status.HTTP_200_OK)
+        for i, res in enumerate(self.response_json[0]["items"]):
+            self.assertEqual(res["order"], i + 1)
+        self.assertEqual(self.response_json[0]["items"][0]["is_completed"], True)
+        self.assertEqual(
+            self.response_json[0]["items"][0]["description"], memo_item.description
+        )
 
     def test_delete_memo_item(self):
         memo = Memo.objects.create(name="test")

@@ -20,6 +20,7 @@ class MemoViewset(
     queryset = Memo.objects.all()
     serializer_class = MemoSerializer
     permission_classes = [AllowAny]
+    ordering = ["created_at"]
 
     @action(methods=["GET", "POST"], detail=True, serializer_class=MemoItemSerializer)
     def item(self, request, pk, *args, **kwargs):
