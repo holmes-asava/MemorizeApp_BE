@@ -38,11 +38,12 @@ class MemoItemSerializer(serializers.ModelSerializer):
                     instance.save()
 
     def update(self, instance, validated_data):
-        self.reorder_other_item(
-            target_order=validated_data["order"],
-            current_order=instance.order,
-            parent_memo=instance.parent_memo,
-        )
+        if validated_data.get("order"):
+            self.reorder_other_item(
+                target_order=validated_data["order"],
+                current_order=instance.order,
+                parent_memo=instance.parent_memo,
+            )
 
         return super().update(instance, validated_data)
 
