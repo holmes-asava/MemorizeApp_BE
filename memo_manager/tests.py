@@ -58,7 +58,6 @@ class WorkOrderTestCase(APITestCase):
         )
         self.user_gets(url=f"/memo/{memo.id}/item/")
         self.assertEqual(self.response.status_code, status.HTTP_200_OK)
-        print(self.response_json)
 
     def test_post_memo(self):
         now = datetime.now(pytz.timezone("UTC"))
