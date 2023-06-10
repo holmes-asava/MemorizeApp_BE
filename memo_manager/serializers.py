@@ -22,10 +22,10 @@ class MemoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Memo
 
-        fields = ["id", "name", "created_at", "reminder_at", "items"]
+        fields = ["id", "name", "created_at", "items"]
         read_only = [
             "created_at",
         ]
         ordering = [
-            "reminder_at",
+            "created_at",
         ]

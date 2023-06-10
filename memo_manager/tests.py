@@ -40,7 +40,9 @@ class WorkOrderTestCase(APITestCase):
         return self.response
 
     def test_get_memo(self):
-        memo = Memo.objects.create(name="test", reminder_at=timezone.now())
+        memo = Memo.objects.create(
+            name="test",
+        )
         MemoItem.objects.create(
             parent_memo=memo, description="create application with react and django "
         )
@@ -48,7 +50,9 @@ class WorkOrderTestCase(APITestCase):
         self.assertEqual(self.response.status_code, status.HTTP_200_OK)
 
     def test_get_memoitem(self):
-        memo = Memo.objects.create(name="test", reminder_at=timezone.now())
+        memo = Memo.objects.create(
+            name="test",
+        )
         MemoItem.objects.create(
             parent_memo=memo, description="create application with react and django "
         )
@@ -65,7 +69,9 @@ class WorkOrderTestCase(APITestCase):
         self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
 
     def test_patch_memo(self):
-        memo = Memo.objects.create(name="test", reminder_at=timezone.now())
+        memo = Memo.objects.create(
+            name="test",
+        )
 
         self.user_patch(
             url=f"/memo/{memo.id}/",
@@ -74,7 +80,7 @@ class WorkOrderTestCase(APITestCase):
         self.assertEqual(self.response.status_code, status.HTTP_200_OK)
 
     def test_post_memo_item(self):
-        memo = Memo.objects.create(name="test", reminder_at=datetime.now())
+        memo = Memo.objects.create(name="test")
         MemoItem.objects.create(
             parent_memo=memo, description="create application with react and django "
         )
@@ -87,7 +93,7 @@ class WorkOrderTestCase(APITestCase):
             self.assertEqual(res["order"], i + 1)
 
     def test_patch_memo_item(self):
-        memo = Memo.objects.create(name="test", reminder_at=datetime.now())
+        memo = Memo.objects.create(name="test")
         MemoItem.objects.create(
             parent_memo=memo, description="create application with react and django "
         )
@@ -108,7 +114,7 @@ class WorkOrderTestCase(APITestCase):
         self.assertEqual(self.response_json[0]["description"], memo_item.description)
 
     def test_delete_memo_item(self):
-        memo = Memo.objects.create(name="test", reminder_at=datetime.now())
+        memo = Memo.objects.create(name="test")
         memo_item = MemoItem.objects.create(
             parent_memo=memo, description="create application with react and django "
         )

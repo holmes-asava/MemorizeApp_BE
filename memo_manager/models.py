@@ -10,7 +10,7 @@ from user_manager.models import User
 class Memo(models.Model):
     name = models.TextField(null=True, blank=True, default=None)
     created_at = models.DateField(auto_now_add=True)
-    reminder_at = models.DateField()
+
     # TODO  note: might have to add owner field
     # owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
