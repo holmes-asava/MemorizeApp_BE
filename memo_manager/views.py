@@ -36,6 +36,9 @@ class MemoViewset(
             )
             serializer.is_valid(raise_exception=True)
             serializer.save()
+            serializer = self.get_serializer(
+                MemoItem.objects.filter(parent_memo=memo).order_by("order"), many=True
+            )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(methods=["PUT", "DELETE"])
@@ -50,14 +53,18 @@ class MemoViewset(
         memo_item = get_object_or_404(MemoItem, id=memo_item_id, parent_memo=memo)
         if request.method == "DELETE":
             memo_item.delete()
-
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            serializer = self.get_serializer(
+                MemoItem.objects.filter(parent_memo=memo).order_by("order"), many=True
+            )
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
         elif request.method == "PATCH":
             serializer = self.get_serializer(memo_item, data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-
+            serializer = self.get_serializer(
+                MemoItem.objects.filter(parent_memo=memo).order_by("order"), many=True
+            )
             return Response(
                 serializer.data,
                 status=status.HTTP_200_OK,
