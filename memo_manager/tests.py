@@ -96,7 +96,7 @@ class WorkOrderTestCase(APITestCase):
         )
         self.user_patch(
             url=f"/memo/{memo.id}/item/{memo_item.id}/",
-            data={"is_complete": True, "order": 1},
+            data={"is_completed": True, "order": 1},
         )
         self.assertEqual(self.response.status_code, status.HTTP_200_OK)
 
@@ -104,7 +104,7 @@ class WorkOrderTestCase(APITestCase):
         self.assertEqual(self.response.status_code, status.HTTP_200_OK)
         for i, res in enumerate(self.response_json):
             self.assertEqual(res["order"], i + 1)
-        self.assertEqual(self.response_json[0]["is_complete"], True)
+        self.assertEqual(self.response_json[0]["is_completed"], True)
         self.assertEqual(self.response_json[0]["description"], memo_item.description)
 
     def test_delete_memo_item(self):

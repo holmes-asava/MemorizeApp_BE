@@ -6,7 +6,7 @@ from memo_manager.models import Memo, MemoItem
 class MemoItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = MemoItem
-        fields = ["is_complete", "description", "order"]
+        fields = ["id", "is_completed", "description", "order"]
         ordering = [
             "order",
         ]
