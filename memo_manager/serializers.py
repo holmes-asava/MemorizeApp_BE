@@ -48,16 +48,6 @@ class MemoItemSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-class ReOrderItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MemoItem
-        fields = ["id", "is_completed", "description", "order"]
-        read_only = ["id", "is_completed", "description"]
-        ordering = [
-            "order",
-        ]
-
-
 class MemoSerializer(serializers.ModelSerializer):
     items = serializers.SerializerMethodField()
 
