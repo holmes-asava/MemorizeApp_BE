@@ -48,6 +48,10 @@ class WorkOrderTestCase(APITestCase):
         )
         self.user_gets(url="/memo/")
         self.assertEqual(self.response.status_code, status.HTTP_200_OK)
+        for field in ["id", "name", "created_at", "items"]:
+            self.assertIn(field, self.response_json[0])
+        for field in ["id", "is_completed", "description", "order"]:
+            self.assertIn(field, self.response_json[0]["items"][0])
 
     def test_get_memoitem(self):
         memo = Memo.objects.create(
@@ -58,6 +62,8 @@ class WorkOrderTestCase(APITestCase):
         )
         self.user_gets(url=f"/memo/{memo.id}/item/")
         self.assertEqual(self.response.status_code, status.HTTP_200_OK)
+        for field in ["id", "is_completed", "description", "order"]:
+            self.assertIn(field, self.response_json[0])
 
     def test_post_memo(self):
         now = datetime.now(pytz.timezone("UTC"))
@@ -66,6 +72,8 @@ class WorkOrderTestCase(APITestCase):
             data={"name": "test2", "reminder_at": now},
         )
         self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
+        for field in ["id", "name", "created_at", "items"]:
+            self.assertIn(field, self.response_json)
 
     def test_patch_memo(self):
         memo = Memo.objects.create(
@@ -77,6 +85,8 @@ class WorkOrderTestCase(APITestCase):
             data={"name": "test2", "items": [{"description": "test2"}]},
         )
         self.assertEqual(self.response.status_code, status.HTTP_200_OK)
+        for field in ["id", "name", "created_at", "items"]:
+            self.assertIn(field, self.response_json)
 
     def test_post_memo_item(self):
         memo = Memo.objects.create(name="test")
@@ -90,6 +100,8 @@ class WorkOrderTestCase(APITestCase):
         self.assertEqual(len(self.response_json), 2)
         for i, res in enumerate(self.response_json):
             self.assertEqual(res["order"], i + 1)
+        for field in ["id", "is_completed", "description", "order"]:
+            self.assertIn(field, self.response_json[0])
 
     def test_patch_memo_item(self):
         memo = Memo.objects.create(name="test")
@@ -119,6 +131,11 @@ class WorkOrderTestCase(APITestCase):
         self.assertEqual(
             self.response_json[0]["items"][0]["description"], memo_item.description
         )
+        for field in ["id", "name", "created_at", "items"]:
+            self.assertIn(field, self.response_json[0])
+
+        for field in ["id", "is_completed", "description", "order"]:
+            self.assertIn(field, self.response_json[0]["items"][0])
 
     def test_delete_memo_item(self):
         memo = Memo.objects.create(name="test")
@@ -138,3 +155,5 @@ class WorkOrderTestCase(APITestCase):
         for i, res in enumerate(self.response_json):
             self.assertEqual(res["order"], i + 1)
             self.assertEqual(res["description"], f"target_memo_item_{i + 1}")
+        for field in ["id", "is_completed", "description", "order"]:
+            self.assertIn(field, self.response_json[0])
